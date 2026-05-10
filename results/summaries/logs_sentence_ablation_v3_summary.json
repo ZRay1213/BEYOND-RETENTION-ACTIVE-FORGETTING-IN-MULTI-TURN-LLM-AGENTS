@@ -1,0 +1,87 @@
+{
+  "n_conv": 20,
+  "mean_sentence_flip_rate": 0.04,
+  "n_conv_with_anchor": 4,
+  "anchor_examples": [
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "Pinckney, a Democrat who represented Texas's 8th Congressional District, passed away on February 16, 1905.",
+      "turn_idx": 4,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "Moore occurred on June 6, 1905.",
+      "turn_idx": 4,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "The appointment process and the formal installation of John M.",
+      "turn_idx": 4,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "Pinckney and the subsequent appointment of his replacement.",
+      "turn_idx": 4,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "The transition from Pinckney to Moore was seamless within the political context of the time.",
+      "turn_idx": 3,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "Moore, also a Democrat, to succeed Pinckney.",
+      "turn_idx": 4,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "Moore (Democrat).",
+      "turn_idx": 3,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the Texas 8th District where John M. Pi"
+    },
+    {
+      "conv_idx": 0,
+      "task": "data2text",
+      "task_id": "sharded-totto_5970399248173253398",
+      "anchor_sentence": "The process of filling vacancies in congressional seats at that time often relied on appointments by state legislatures, as direct elections for such vacancies were not mandated until much later.",
+      "turn_idx": 5,
+      "gold": "After the death of John M. Pinckney (D) on April 24, 1905, John M. Moore (D) bec",
+      "orig_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s",
+      "fixed_pred_snippet": "The table details changes in the House of Representatives during the 59th United States Congress, highlighting the death of John M. Pinckney and the s"
+    }
+  ]
+}

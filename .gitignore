@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Heavy logs (paper-relevant aggregates only — full traces stay on server)
+logs_*/
+*.log
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Local env
+.env
+.envrc
+venv/
+.venv/

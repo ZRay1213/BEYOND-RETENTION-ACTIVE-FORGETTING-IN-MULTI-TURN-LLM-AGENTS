@@ -1,0 +1,1677 @@
+[
+  {
+    "task_id": "sharded-F1-additive/0",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 3, divisible by 8, less than 50, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 24",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 3.",
+        "constraint": "divisible_by_3"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/1",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 11, less than 500, odd, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 77",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/2",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 6, divisible by 5, less than 50, even",
+    "answer": "Solving step by step yields the answer.\n#### 30",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 6.",
+        "constraint": "divisible_by_6"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/3",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 2, less than 500, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 20",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 2.",
+        "constraint": "divisible_by_2"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/5",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 8, less than 500, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 40",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/7",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 11, less than 200, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 44",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 200.",
+        "constraint": "less_than_200"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/9",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 6, divisible by 11, less than 500, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 132",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 6.",
+        "constraint": "divisible_by_6"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/10",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 11, less than 500, odd, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 77",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/12",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 5, less than 50, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 20",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/13",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 9, less than 500, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 126",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/16",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 9, less than 500, odd",
+    "answer": "Solving step by step yields the answer.\n#### 63",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/17",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 8, less than 50, even",
+    "answer": "Solving step by step yields the answer.\n#### 40",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/18",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 9, less than 500, odd",
+    "answer": "Solving step by step yields the answer.\n#### 63",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/19",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 9, less than 500, odd, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 45",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/21",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 3, divisible by 9, less than 200, odd",
+    "answer": "Solving step by step yields the answer.\n#### 9",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 3.",
+        "constraint": "divisible_by_3"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 200.",
+        "constraint": "less_than_200"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/24",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 6, divisible by 2, less than 50, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 6.",
+        "constraint": "divisible_by_6"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 2.",
+        "constraint": "divisible_by_2"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/26",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 3, divisible by 11, less than 50, odd, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 33",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 3.",
+        "constraint": "divisible_by_3"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/29",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 11, less than 200, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 44",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 200.",
+        "constraint": "less_than_200"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/32",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 3, divisible by 9, less than 50, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 18",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 3.",
+        "constraint": "divisible_by_3"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/34",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 9, less than 200, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 90",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 200.",
+        "constraint": "less_than_200"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/35",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 6, divisible by 11, less than 100, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 66",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 6.",
+        "constraint": "divisible_by_6"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 100.",
+        "constraint": "less_than_100"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/36",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 5, less than 500, odd, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 35",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 500.",
+        "constraint": "less_than_500"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/37",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 7, divisible by 5, less than 50, odd",
+    "answer": "Solving step by step yields the answer.\n#### 35",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 7.",
+        "constraint": "divisible_by_7"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/38",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 5, less than 50, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 20",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/46",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 5, less than 50, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 20",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 50.",
+        "constraint": "less_than_50"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/47",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 9, less than 100, even, digit sum < 10",
+    "answer": "Solving step by step yields the answer.\n#### 90",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 9.",
+        "constraint": "divisible_by_9"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 100.",
+        "constraint": "less_than_100"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to less than 10.",
+        "constraint": "digit_sum<10"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/48",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 8, less than 100, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 8",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 100.",
+        "constraint": "less_than_100"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/49",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 5, divisible by 11, less than 100, odd, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 55",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 5.",
+        "constraint": "divisible_by_5"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 11.",
+        "constraint": "divisible_by_11"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 100.",
+        "constraint": "less_than_100"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is odd.",
+        "constraint": "odd"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/52",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 3, divisible by 8, less than 100, even, digit sum even",
+    "answer": "Solving step by step yields the answer.\n#### 24",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 3.",
+        "constraint": "divisible_by_3"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 100.",
+        "constraint": "less_than_100"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "Its digits sum to an even number.",
+        "constraint": "digit_sum_even"
+      },
+      {
+        "shard_id": 6,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  },
+  {
+    "task_id": "sharded-F1-additive/54",
+    "task": "math",
+    "question": "Find the smallest positive integer satisfying: divisible by 4, divisible by 8, less than 200, even",
+    "answer": "Solving step by step yields the answer.\n#### 8",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I am thinking of a positive integer divisible by 4.",
+        "constraint": "divisible_by_4"
+      },
+      {
+        "shard_id": 2,
+        "shard": "It is also divisible by 8.",
+        "constraint": "divisible_by_8"
+      },
+      {
+        "shard_id": 3,
+        "shard": "The number is less than 200.",
+        "constraint": "less_than_200"
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it is even.",
+        "constraint": "even"
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?",
+        "constraint": "find_smallest"
+      }
+    ],
+    "eligibility_oracle": {
+      "system": {
+        "valid": true,
+        "type": "system"
+      },
+      "user_*": {
+        "valid": true,
+        "type": "user_evidence"
+      },
+      "assistant_claim_provisional": {
+        "valid": false,
+        "type": "assistant_claim"
+      },
+      "assistant_clarification": {
+        "valid": true,
+        "type": "assistant_clarification"
+      },
+      "rule": "all assistant claims before final shard are provisional (under partial info), all user shards are valid"
+    }
+  }
+]

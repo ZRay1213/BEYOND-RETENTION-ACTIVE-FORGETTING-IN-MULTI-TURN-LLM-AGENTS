@@ -1,0 +1,135 @@
+{
+  "n_written": 80,
+  "n_skipped_no_gold": 0,
+  "n_skipped_too_long": 23,
+  "per_turn_accuracy": {
+    "0": {
+      "acc": 0.08045977011494253,
+      "n": 87
+    },
+    "1": {
+      "acc": 0.11494252873563218,
+      "n": 87
+    },
+    "2": {
+      "acc": 0.43023255813953487,
+      "n": 86
+    },
+    "3": {
+      "acc": 0.32142857142857145,
+      "n": 84
+    },
+    "4": {
+      "acc": 0.3333333333333333,
+      "n": 78
+    },
+    "5": {
+      "acc": 0.32857142857142857,
+      "n": 70
+    },
+    "6": {
+      "acc": 0.4,
+      "n": 15
+    },
+    "7": {
+      "acc": 0.6666666666666666,
+      "n": 3
+    },
+    "8": {
+      "acc": 1.0,
+      "n": 3
+    },
+    "9": {
+      "acc": 1.0,
+      "n": 1
+    },
+    "10": {
+      "acc": 1.0,
+      "n": 1
+    }
+  },
+  "first_correct_turn_distribution": {
+    "0": 7,
+    "1": 10,
+    "2": 30,
+    "3": 10,
+    "4": 6,
+    "5": 2,
+    "6": 2
+  },
+  "case_studies": [
+    {
+      "task": "data2text",
+      "task_id": "sharded-totto_6553292105437349698",
+      "first_asst_response": "The table lists nominees, their works, awards nominated for, and outcomes in 1997 across various categories.",
+      "gold": "In 1997, Mercury Falling earned a Grammy nomination for Best Pop Vocal Album and Best Male Pop Vocal",
+      "n_turns": 6,
+      "all_turn_scores": [
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "task": "data2text",
+      "task_id": "sharded-totto_-4987169707523815662",
+      "first_asst_response": "The table lists Puerto Rico's governors with portraits, their terms' start and end dates, and their prior public roles.",
+      "gold": "The first president of the New Progressive Party (Puerto Rico), was Luis A. Ferr\u00e9, who served from 1",
+      "n_turns": 6,
+      "all_turn_scores": [
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "task": "math",
+      "task_id": "sharded-GSM8K/435",
+      "first_asst_response": "How many lollipops did Ray initially have to give to his friends?",
+      "gold": "5",
+      "n_turns": 4,
+      "all_turn_scores": [
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "task": "data2text",
+      "task_id": "sharded-totto_8818800995265857507",
+      "first_asst_response": "The table you're referring to is structured to provide a comprehensive overview of music videos released between 1984 and 1989. Each row in the table represents a distinct music video entry, categorized by its release year, the artist who created it, and the specific title of the video. Here\u2019s a detailed breakdown of what each component of the table includes:\n\n1. **Year**: This column lists the sp",
+      "gold": "MTV Video Music Award for Video of the Year was first awarded in 1984, to The Cars for the video \"Yo",
+      "n_turns": 6,
+      "all_turn_scores": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "task": "data2text",
+      "task_id": "sharded-totto_5063455815789688983",
+      "first_asst_response": "Could you specify which award events or types of programs are included in this table?",
+      "gold": "Darren Criss is the recipient of the Golden Globe Award for his portrayal of Andrew Cunanan on The A",
+      "n_turns": 6,
+      "all_turn_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

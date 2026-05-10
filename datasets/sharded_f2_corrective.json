@@ -1,0 +1,842 @@
+[
+  {
+    "task_id": "sharded-F2-corrective/0",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 20, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 20, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 20, not 100. Please use 20."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/1",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 50, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 50, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/2",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 125, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 125, even.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/3",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 50, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 50, even.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/4",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 250, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 250, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 250, not 500. Please use 250."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/6",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 20, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 20, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 20, not 100. Please use 20."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/7",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 100, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 100, even.\n#### 10",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 200."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 100, not 200. Please use 100."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/8",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 50, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 50, odd.\n#### 5",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/9",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 50, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 50, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 200."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 200. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/10",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 125, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 125, even.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/12",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 250, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 250, even.\n#### 10",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 250, not 500. Please use 250."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/13",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 250, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 250, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 250, not 500. Please use 250."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/14",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 50, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 50, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/15",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 40, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 40, odd.\n#### 5",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 200."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 40, not 200. Please use 40."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/16",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 50, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 50, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 200."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 200. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/17",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 100, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 100, even.\n#### 10",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 100, not 500. Please use 100."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/18",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 100, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 100, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 100, not 500. Please use 100."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/20",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 125, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 125, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/22",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 50, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 50, odd.\n#### 5",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/24",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 6, less than 25, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 6, less than 25, even.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 6."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 25, not 100. Please use 25."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/28",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 50, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 50, even.\n#### 6",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/29",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 125, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 125, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/31",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 250, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 250, even.\n#### 10",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 250, not 500. Please use 250."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/32",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 125, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 125, even.\n#### 10",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/33",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 5, less than 100, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 5, less than 100, odd.\n#### 5",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 5."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 200."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 100, not 200. Please use 100."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/34",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 100, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 100, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 100, not 500. Please use 100."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/36",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 25, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 25, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 25, not 100. Please use 25."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/37",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 125, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 125, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 500."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 125, not 500. Please use 125."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/38",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 3, less than 25, and odd.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 3, less than 25, odd.\n#### 3",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 3."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 25, not 100. Please use 25."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be odd."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  },
+  {
+    "task_id": "sharded-F2-corrective/39",
+    "task": "math",
+    "question": "Find the smallest positive integer divisible by 4, less than 50, and even.",
+    "answer": "After applying the correction, the constraints reduce to: divisible by 4, less than 50, even.\n#### 4",
+    "shards": [
+      {
+        "shard_id": 1,
+        "shard": "I want a positive integer divisible by 4."
+      },
+      {
+        "shard_id": 2,
+        "shard": "It must be less than 100."
+      },
+      {
+        "shard_id": 3,
+        "shard": "Actually, I made a mistake\u2014the limit is less than 50, not 100. Please use 50."
+      },
+      {
+        "shard_id": 4,
+        "shard": "And it must be even."
+      },
+      {
+        "shard_id": 5,
+        "shard": "What is the smallest such positive integer?"
+      }
+    ]
+  }
+]

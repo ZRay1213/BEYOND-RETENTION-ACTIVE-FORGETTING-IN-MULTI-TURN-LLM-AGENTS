@@ -1,0 +1,25 @@
+{
+  "n": 35,
+  "fact_avg": 0.4219617241495004,
+  "outdated_avg": 0.1660901770743871,
+  "orig_avg": 0.16850937637137087,
+  "delta": 0.2558715470751133,
+  "h1_confirmed": true,
+  "by_task": {
+    "actions": {
+      "n": 12,
+      "fact": 0.167,
+      "outdated": 0.0
+    },
+    "data2text": {
+      "n": 16,
+      "fact": 0.548,
+      "outdated": 0.301
+    },
+    "math": {
+      "n": 7,
+      "fact": 0.571,
+      "outdated": 0.143
+    }
+  }
+}
