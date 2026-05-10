@@ -16,51 +16,69 @@ The mechanism is attention-mediated, replicates across 5 models in 4 architectur
 
 ```
 code/
-  lic/                           # Lost-in-Conversation simulators + harnesses
-    simulator_*.py               # Base protocol implementations
-    harness_*.py                 # Cross-protocol harnesses (fresh_last/every, cacheguard, marked_history, ...)
-    harness_cacheguard.py        # CacheGuard typed-eligibility renderer
-    harness_fresh_every.py       # Fresh-Every full-history-purge protocol
-    harness_marked_history.py    # [OUTDATED] marker baseline (H3 falsifier)
-    harness_selective_drop.py    # Drop-EARLIEST K-fraction sweep
-    harness_drop_latest.py       # Drop-LATEST K-fraction sweep
-    cacheguard_bfcl.py           # CacheGuard adapter for BFCL v4
-    bootstrap_bfcl.py            # Bootstrap CIs for BFCL
-    attention_probe_n30.py       # Attention probe (n=22 final after OOM filter)
-    model_openai.py              # Multi-endpoint vLLM/OpenAI client
-    requirements.txt
-  scripts/                       # Top-level analysis + experiment scripts
-    per_turn_v3.py               # Per-turn accuracy trajectory (Appendix H)
-    sentence_ablation_v3.py      # Cross-turn sentence-level anchor identification (Appendix H)
-    bootstrap_lic.py             # Paired-bootstrap stats
-    score_lic.py / score_bestofN.py # LiC scoring + best-of-N control
-    extract_features_v2.py       # Bandit feature extraction (legacy)
-    train_bandit_v2.py           # Bandit controller (legacy)
-  run_scripts/                   # Bash launchers for individual experiments
-    run_fresh_every.sh
-    run_fresh_last.sh
-    run_cacheguard.sh
-    run_full_concat.sh
-    run_drop_latest.sh
-    run_f1_all.sh / run_f2_all.sh # Synthetic benchmarks
-    run_counterfactual.sh
+  lic/                              # 73 files — Lost-in-Conversation simulators + harnesses
+    simulator_{sharded,full,recap,snowball,...}.py  Base protocol implementations
+    harness_{fresh_last,fresh_every,cacheguard,    Protocol harnesses
+             marked_history,drop_latest,
+             selective_drop,counterfactual}.py
+    cacheguard_bfcl.py / score_bfcl.py /            BFCL v4 stateful tool-use suite
+        bootstrap_bfcl.py / analyze_bfcl.py
+    attention_probe_n30.py                          Attention probe (n=22 after OOM filter)
+    model_openai.py                                 Multi-endpoint vLLM/OpenAI client
+    state_tracker.py / system_agent.py              Stage-2 state tracking (legacy)
+    proposer.py / proposer_v2.py /                  Meta-Harness style mutator
+        proposer_gepa_style.py
+    t12_hchr_server.py / t14_fact_ctrl_*.py         HCHR + FACT positive control
+  scripts/                          # 16 top-level analysis scripts
+    per_turn_v3.py                                  Per-turn accuracy trajectory (Appendix H)
+    sentence_ablation_v3.py                         Cross-turn anchor sentence ID (Appendix H)
+    bootstrap_lic.py                                Paired-bootstrap stats (Appendix B)
+    score_lic.py / score_bestofN.py                 LiC scoring + best-of-N control
+    train_bandit_v2.py / extract_features_v2.py     Bandit controller (legacy Stage-3)
+    mine_few_shot.py / per_instance.py
+  scripts_extra/                    # 23 cross-model experiment launchers + task splits
+    exp_llama_*.sh / exp_gemma*.sh / exp_newmodels.sh   Cross-model experiment scripts
+    exp_lic14b{,_v2}.sh / exp_concat_7bsh.sh             Main-result launchers
+    exp_cf_v2.sh / exp_cg_llama.sh                       Counterfactual + CacheGuard cross-arch
+    auto_pipeline*.sh / auto_g4_after_g1c1.sh            Multi-generation harness evolution
+    deploy_deepseek_r1.sh / run_deepseek_r1_bench.sh     DSR1 vLLM deployment
+    code_{eval,sel}.json / eval_tasks.json /             Task-split JSONs (3-way split)
+        f1_heldout.json / multi_heldout.json
+    few_shot_examples.json                              Few-shot for LLM-classifier controller
+  run_scripts/                      # 69 protocol-level launchers
+    run_{fresh_every,fresh_last,cacheguard,full_concat,
+         drop_latest,selective_drop,marked_history,
+         f1_all,f2_all,f3_all,recap_sh,counterfactual}.sh
+    vllm_serve_{14b,7b,32b}*.sh / vllm_{llama,mistral,gemma}*.sh   Model serving
+  harness_gepa_population/          # GEPA-style evolved harnesses + rationales
+  controllers/                      # Trained bandit Q-models (.joblib)
 
-datasets/                        # JSON dataset files used in experiments
-  multi_heldout48.json           # 48-instance multi-task held-out (8 per task × 6 tasks)
-  multi_mca24.json               # 24-instance cross-model (8 each math/code/actions)
-  sharded_stage1_K20.json        # Stage-1 sharded data
-  sharded_stage1_K25.json
-  sharded_f1_additive.json       # Synthetic F1 additive-constraints
-  sharded_f2_corrective.json     # Synthetic F2 corrective-constraints
-  sharded_smoke*.json
+datasets/                           # 8 JSON dataset files used in experiments
+  multi_heldout48.json              48-inst multi-task held-out (8 per × 6 tasks)
+  multi_mca24.json                  24-inst cross-model (math/code/actions × 8)
+  sharded_stage1_K{20,25}.json      Stage-1 sharded data
+  sharded_f1_additive.json          F1 synthetic additive-constraints (Appendix A)
+  sharded_f2_corrective.json        F2 synthetic corrective-constraints (Appendix A)
 
 results/
-  summaries/                     # summary.json from each experiment
-  per_turn_v3/                   # n=80 per-turn accuracy trajectory
-  sentence_ablation_v3/          # n=20 cross-turn anchor sentences
-  dsr1_sharded/, dsr1_fresh_every/ # DeepSeek-R1-Distill-7B partial results (incomplete; see Notes)
-  cross_model/                   # Aggregate JSONs from cross-model runs
-  stats/                         # Bootstrap output
+  summaries/                        # summary.json from each Appendix-H run
+  per_turn_v3/                      n=80 per-turn accuracy trajectory (Fig 7)
+  sentence_ablation_v3/             n=20 cross-turn anchor sentences (Appendix H)
+  bfcl/                             BFCL v4 N=200 jsonl per protocol
+                                    (cacheguard_n200, fresh-every_n200, longctx, missparam, ...)
+  cross_model_aggregates/           25 sub-folders, one per (model × protocol):
+                                    Llama / Mistral / Gemma / Qwen-7B × Sharded / Concat /
+                                    Fresh-Every / Fresh-Last / CacheGuard / Marked-History;
+                                    plus drop-K and drop-latest sweeps
+  sharded_stage1_traces/            Source traces for per-turn + sentence-ablation re-analysis
+                                    (math; data2text; actions skipped due to 250-turn outliers)
+  dsr1_sharded/, dsr1_fresh_every/  DeepSeek-R1-Distill-7B PARTIAL results (see Notes)
+  stats/                            Bootstrap output (empty placeholder)
+
+paper/                              # Paper source (ICLR 2026 template)
+  main.tex / main.pdf               21-page paper
+  iclr2026_conference.{sty,bst,bib} ICLR 2026 style files + bib
+  math_commands.tex / fancyhdr.sty / natbib.sty
 ```
 
 ## Reproduction quick-start
