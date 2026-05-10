@@ -6,8 +6,9 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 
-# Heavy logs (paper-relevant aggregates only — full traces stay on server)
-logs_*/
+# Top-level heavy log directories from the original server (we keep
+# the per-model aggregates under results/cross_model_aggregates/logs_* though)
+/logs_*/
 *.log
 
 # IDE
