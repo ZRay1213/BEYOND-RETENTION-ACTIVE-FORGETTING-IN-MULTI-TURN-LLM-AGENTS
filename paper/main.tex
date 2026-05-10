@@ -18,8 +18,9 @@
 \usepackage{amsmath,amssymb,amsthm}
 \newtheorem{proposition}{Proposition}
 \newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
 
-\title{Beyond Retention: \\ Active Forgetting in Multi-Turn LLM Agents}
+\title{Active Forgetting: \\ A Missing Memory Primitive for LLM Agents}
 
 \author{Anonymous Authors}
 
@@ -36,7 +37,7 @@
 % ABSTRACT — paper-writing skill V2: Challenge -> Insight -> Contribution
 % =====================================================
 \begin{abstract}
-Multi-turn LLM degradation on underspecified conversations is largely an artifact of the chat protocol, not a model-capability deficit. On Lost-in-Conversation with Qwen2.5-14B, a five-line policy that drops the model's own prior tokens at the final turn (\textsc{Fresh-Last}) recovers 87\% of the multi-turn gap; dropping them at every turn (\textsc{Fresh-Every}) reaches 103\% and exceeds the single-turn ceiling. The fix is binary rather than graded: keeping any 25--75\% of prior assistant tokens recovers only 4--23\% of the gap. The mechanism is attention-mediated. On $n{=}22$ failed sharded conversations (Qwen2.5-7B), prior provisional commitments receive per-token attention comparable to the system prompt and 8.5\% above user evidence, so attention-salience-based KV compression preferentially keeps tokens that should be evicted. Text-level mitigations also fail: prefixing prior tokens with \texttt{[OUTDATED]} barely moves accuracy. The effect replicates across five models in four architecture families (Qwen-7B/14B, Llama-3.1-8B, Mistral-7B, Gemma-2-9B). We frame this as a missing memory primitive. Agent systems implement \emph{generation} and \emph{retention} (KV cache reuse) but lack \emph{active forgetting}. We introduce VCHR and HCHR alongside the standard prefix-cache hit rate (PCHR; message-level proxy mPCHR) to make forgetting measurable, and propose \textsc{CacheGuard}, a typed forgetting controller that drops provisional commitments while retaining verified evidence. \textsc{CacheGuard} validates on all four architecture families (Qwen-14B 0.875, Llama-3.1-8B 0.704, Mistral-7B 0.544, Gemma-2-9B 0.741), and matches or exceeds \textsc{Fresh-Every} on Mistral and Gemma. The picture reverses cleanly on stateful tool use (BFCL v4): \textsc{Fresh-Every} collapses to 0.090 while \textsc{CacheGuard} matches the strongest baseline (0.280 vs.\ 0.295, $p{=}0.66$, ns), so forgetting must be content-typed rather than uniform. Chat protocols and serving stacks should expose active forgetting as a first-class primitive, alongside generation and retention.
+LLM agent memory systems---KV cache compression~\citep{zhang2023h2o,xiao2024streamingllm,li2024snapkv}, hierarchical memories~\citep{packer2023memgpt,li2025memos}, summarization-based long-term memory~\citep{wu2023recursivesumm}---share a structural assumption inherited from database and retrieval-style storage: cached content is authoritative evidence. We argue this is a category error. LLM-generated content is \emph{provisional}: produced under a partial subset of the eventual evidence and not retracted when later evidence refines it. Persisting provisional content under the same chat-template role as user evidence biases subsequent decisions. We identify \emph{active forgetting}---content-typed eviction at decision time---as a missing memory primitive, distinct from generation and retention. Three lines of evidence show forgetting is structurally necessary, not a deployment optimization. (i) On Lost-in-Conversation with Qwen2.5-14B, dropping all prior assistant tokens at every turn (\textsc{Fresh-Every}) reaches 103\% gap recovery and exceeds the single-turn ceiling; the dose-response is a cliff (4--23\% recovery for any 25--75\% retention vs.\ 87\% for full removal), and Proposition~\ref{prop:cliff} shows any non-empty subset of provisional content perpetuates contamination. (ii) The mechanism is attention-mediated rather than format-mediated: prior assistant commitments receive per-token attention comparable to the system prompt while \texttt{[OUTDATED]} markers leave accuracy at the Sharded floor---content typing must be structural, not textual. (iii) Uniform forgetting fails when some content is verified state: on BFCL v4 stateful tool use, \textsc{Fresh-Every} collapses from 0.875 to 0.090 while typed \textsc{CacheGuard} (drops provisional claims, retains tool results) matches the strongest baseline (0.280 vs.\ 0.295, $p{=}0.66$). The effect replicates across five models in four architecture families. We chart a forgetting-operation taxonomy (attention-zero, sentence drop, turn drop, typed-block drop) and introduce VCHR and HCHR alongside PCHR to make forgetting measurable. Implications cut across the stack: KV-compression heuristics that retain attention-important tokens preferentially preserve harmful anchors; agentic memory frameworks that summarize history inherit the contamination; chat protocols need forgetting as a first-class primitive alongside generation and retention.
 \end{abstract}
 
 % =====================================================
@@ -44,8 +45,8 @@ Multi-turn LLM degradation on underspecified conversations is largely an artifac
 % =====================================================
 \section{Introduction}
 
-% --- Para 1: Active forgetting is the missing memory operation ---
-LLM agent systems are designed around two memory operations: \emph{generation} (the agent's outputs) and \emph{retention} (KV-cache reuse, optimized in modern serving stacks like vLLM~\citep{kwon2023vllm}, SGLang~\citep{zheng2024sglang}, and LMCache~\citep{liu2025lmcache}, monitored via prefix-cache hit statistics). A third operation has received much less attention: \emph{active forgetting}. Standard chat protocols have no forgetting mechanism beyond full-history truncation: a user message (external evidence) and a prior model output (often a provisional commitment under partial information) both persist indefinitely, serialized under identical role tags. Existing serving systems are intentionally agnostic to the epistemic status of cached content---they answer ``can this prefix be reused?'' but not ``should this content remain eligible for future decisions?''. The latter question is what forgetting answers.
+% --- Para 1: A category error in LLM agent memory ---
+The dominant abstraction for LLM agent memory---across KV cache compression in serving stacks~\citep{kwon2023vllm,zheng2024sglang,liu2025lmcache,zhang2023h2o,xiao2024streamingllm,li2024snapkv}, hierarchical memories in agent frameworks~\citep{packer2023memgpt,li2025memos,park2023generative,memagent2026}, and summarization-based long-term memory~\citep{wu2023recursivesumm}---treats stored content as authoritative evidence to be retrieved or compressed. This abstraction inherits from databases and information retrieval, where every datum was externally observed. LLM-generated content does not satisfy this assumption: an assistant response is a model action, often a provisional commitment under a strict subset of the eventual evidence. Persisting it under the same chat-template role as user evidence biases subsequent decisions. We argue this is a \emph{category error}. The missing operation is \emph{active forgetting}: content-typed eviction at decision time, complementing generation and retention. Where retention answers ``can this prefix be reused?'', forgetting answers ``should this content remain eligible for future decisions?''. Existing serving systems are intentionally agnostic to the latter; we show this agnosticism is not a benign optimization but a correctness-bearing omission.
 
 % --- Para 2: Multi-turn conversations mix evidence and commitment ---
 A multi-turn agent context is not a static document. A user message is external evidence. A successful tool observation is external evidence. But an assistant response is a model action---often a provisional commitment made under partial information---which the standard chat protocol then serializes into the next prompt as if it were evidence. Recent work~\citep{laban2025lost} reports that multi-turn LLM accuracy on underspecified conversations drops 30--40\% relative to single-turn fully-specified versions, even though by conversation's end the assistant has received the same information. Existing remedies---prompt evolution~\citep{agrawal2025gepa}, harness search~\citep{lee2026metaharness, zhang2024aflow}, dialogue policy learning~\citep{chen2024act}, and the LiC paper's own \textsc{Recap}---all retain the assistant's prior responses in context. \textsc{Recap} attains the highest message-level prefix-cacheability proxy (mPCHR 0.851 in our measurement) yet recovers only 65\% of the multi-turn gap, 22\,pp below \textsc{Fresh-Last}. Optimizing for cacheability has a hidden cost.
@@ -72,10 +73,12 @@ We synthesize these findings into \textsc{CacheGuard}, a typed forgetting contro
 % --- Para 6: Contributions summary (4 items) ---
 Our contributions are:
 \begin{itemize}\itemsep0pt
-    \item \textbf{Framing.} We position \emph{active forgetting} as a missing primitive in LLM agent memory, alongside generation and retention. Three metrics (PCHR, VCHR, HCHR) operationalize it: PCHR measures retention, VCHR measures whether reused content is still valid evidence, HCHR measures whether reused content is causally harmful.
-    \item \textbf{Diagnosis.} \textsc{Recap} and \textsc{Fresh-Last} differ only in whether prior assistant tokens are forgotten at decision time, yet \textsc{Fresh-Last} recovers 22\,pp more of the gap. The dose-response is a cliff at $K{=}1.0$, a ceiling exceedance survives a best-of-$N$ control on Llama-3.1-8B (Appendix~\ref{app:bestofN}), and \texttt{[OUTDATED]} markers leave accuracy at 0.307 vs.\ 0.771 for full removal. Forgetting is binary, attention-mediated, and not overridable by text instructions.
-    \item \textbf{Method.} \textsc{CacheGuard} classifies context blocks by epistemic role, drops provisional commitments, and retains verified evidence. It needs no retraining and is deployable client-side. The forgetting effect and \textsc{CacheGuard} both replicate across five models in four architecture families (Qwen-7B/14B, Llama-3.1-8B, Mistral-7B, Gemma-2-9B); on Mistral and Gemma \textsc{CacheGuard} matches or exceeds \textsc{Fresh-Every}, showing that typed eligibility can outperform uniform forgetting.
-    \item \textbf{Two-regime validation.} On LiC (stateless reasoning) \textsc{Fresh-Every} reaches 0.875. On BFCL v4 (stateful tool use) \textsc{Fresh-Every} collapses to 0.090 ($-20.5$\,pp vs.\ \textsc{Sharded}, $p<0.001$, $N=200$). \textsc{CacheGuard} matches \textsc{Sharded} on BFCL (ns) while still beating it on LiC, so forgetting must be content-typed rather than uniform.
+    \item \textbf{A category-level claim.} We identify the missing operation in LLM agent memory as \emph{active forgetting} of provisional content, distinct from generation and retention. Existing serving and memory systems treat all stored content as authoritative evidence; LLM-generated content is structurally not, and persisting it under the same role biases later decisions. This is a category error, not an optimization gap.
+    \item \textbf{A regime-independent theory.} Definition~\ref{def:provisional} formalizes provisional content; Proposition~\ref{prop:cliff} shows any non-empty subset of provisional content perpetuates posterior contamination. The dose-response cliff at $K{=}1.0$, the marked-history null, and the universal failure of attention-salience compression all follow as corollaries.
+    \item \textbf{A taxonomy of forgetting operations} (Section~\ref{sec:taxonomy}, Table~\ref{tab:forget-taxonomy}): token-attention-level, sentence-level, turn-level uniform, block-typed, conversation-level. Each operator's domain of validity is specified by what content it can correctly classify.
+    \item \textbf{Empirical validation across regimes and models.} On Lost-in-Conversation, \textsc{Fresh-Every} reaches 103\% gap recovery and exceeds the single-turn ceiling; the cliff and the marked-history null replicate across five models in four architecture families (Qwen-7B/14B, Llama-3.1-8B, Mistral-7B, Gemma-2-9B). On BFCL v4 stateful tool use, uniform forgetting collapses ($-20.5$\,pp vs.\ \textsc{Sharded}, $N{=}200$) while typed \textsc{CacheGuard} matches the strongest baseline---direct evidence that the operator must be content-typed.
+    \item \textbf{Mechanism.} Prior assistant commitments receive per-token attention comparable to the system prompt and above user evidence; \texttt{[OUTDATED]} markers leave accuracy at the floor. The mechanism is attention-mediated rather than format-mediated, ruling out KV compression by attention salience as a fix.
+    \item \textbf{Three metrics for forgetting} (PCHR, VCHR, HCHR) and a deployable instantiation (\textsc{CacheGuard}, no retraining, client-side). Both make the abstract claim measurable and shippable.
 \end{itemize}
 
 % =====================================================
@@ -131,8 +134,30 @@ We complement it with two metrics that depend on the conversation's evolving epi
 \end{equation}
 where $\text{flips}(b)$ is 1 iff removing $b$ counterfactually changes the outcome from incorrect to correct. PCHR alone defines the standard objective; an ideal serving stack maximizes $\text{PCHR} \times \text{VCHR}$ while minimizing HCHR. Existing systems measure only PCHR; multi-turn agentic deployments require also tracking VCHR and HCHR.
 
+\subsection{A taxonomy of forgetting operations}
+\label{sec:taxonomy}
+Forgetting can act at five granularities, each with a different domain of validity. Table~\ref{tab:forget-taxonomy} summarizes; the protocols evaluated in this paper (Section~\ref{sec:main-protocol}) instantiate four of the five rows.
+
+\begin{table}[h]
+\centering
+\caption{Forgetting-operation taxonomy. Each operator differs in what it removes from the LLM's effective context. Coarser operators are simpler but lose authoritative content; finer operators need a typing signal.}
+\label{tab:forget-taxonomy}
+\small
+\begin{tabular}{lp{0.32\linewidth}p{0.42\linewidth}}
+\toprule
+Granularity & Operator & Domain of validity \\
+\midrule
+Token-level & Zero attention to a token set (no token deletion) & Where eviction would break cache structure; useful when the same context is reused with multiple decision points (S8b). \\
+Sentence-level & Drop specific sentences within a turn & Intra-turn reasoning (Thought Anchors~\citep{thoughtanchors2025}); cross-turn extension in Appendix~\ref{app:anchor-id}. \\
+Turn-level (uniform) & Drop all prior assistant turns at decision time (\textsc{Fresh-Last}/\textsc{Fresh-Every}) & Stateless reasoning where every assistant turn is provisional. Fails when some assistant content carries verified state. \\
+Block-typed & Drop blocks classified as provisional, retain authoritative (\textsc{CacheGuard}) & Mixed regimes with both kinds of content (BFCL v4: tool calls + tool results are authoritative, asst-text is provisional). \\
+Conversation-level & Reset all context per query (\textsc{Concat}) & Bounded single-shot evaluation; loses history information. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Protocol variants}
-All protocols differ only in which subset of $\{a_1, \ldots, a_{t-1}\}$ is passed to the LLM at turn $t$. \textsc{Sharded}: full history $[s, u_1, a_1, \ldots, u_t]$. \textsc{Fresh-Last}: at the final turn, pass $[s, u_{\text{concat}}]$ dropping all prior assistant messages (five lines of code). \textsc{Fresh-Every}: at every turn $t$, pass $[s, u_{\text{concat-so-far}}]$; the LLM never sees its own prior responses. \textsc{Marked-History}: retain all prior assistant messages but prefix each with \texttt{[OUTDATED PARTIAL-INFO COMMITMENT]}, testing whether anchoring is format-confusion (H3) or attention-mediated (H1). \textsc{Selective-Drop}: parametrized by $K \in [0,1]$, drops the first (or last) $K$ fraction of prior assistant messages; $K=0$ is Sharded, $K=1$ is Fresh-Last.
+All protocols differ only in which subset of $\{a_1, \ldots, a_{t-1}\}$ is passed to the LLM at turn $t$. \textsc{Sharded}: full history $[s, u_1, a_1, \ldots, u_t]$. \textsc{Fresh-Last}: at the final turn, pass $[s, u_{\text{concat}}]$ dropping all prior assistant messages (five lines of code). \textsc{Fresh-Every}: at every turn $t$, pass $[s, u_{\text{concat-so-far}}]$; the LLM never sees its own prior responses. \textsc{Marked-History}: retain all prior assistant messages but prefix each with \texttt{[OUTDATED PARTIAL-INFO COMMITMENT]}, testing whether anchoring is format-confusion (H3) or attention-mediated (H1). \textsc{Selective-Drop}: parametrized by $K \in [0,1]$, drops the first (or last) $K$ fraction of prior assistant messages; $K=0$ is \textsc{Sharded}, $K=1$ is \textsc{Fresh-Last}. These cover the turn-level uniform and block-typed rows of Table~\ref{tab:forget-taxonomy}; sentence-level (Appendix~\ref{app:anchor-id}) and token-attention-level (Section~\ref{sec:limitations}) are evaluated separately.
 
 \subsection{CacheGuard: validity-aware reuse}
 \label{sec:cacheguard}
@@ -220,31 +245,32 @@ Fourth, the cliff replicates cross-architecture. On Llama-3.1-8B (Table~\ref{tab
 \paragraph{Per-turn evidence.}
 Tracking accuracy turn-by-turn within the \textsc{Sharded} protocol (Appendix~\ref{app:anchor-id}, Figure~\ref{fig:per-turn}, $n{=}80$ math$+$data2text conversations) shows a non-monotone trajectory: turn 0--1 are very low (0.080, 0.115; insufficient evidence), turn 2 rises sharply to 0.430 as more shards have been revealed, then turn 3 \emph{dips back} to 0.321 and the curve plateaus around 0.32--0.40. The dip is the per-turn signature of accumulated commitment bias: as more prior responses enter the context, their cumulative likelihood factor drags the posterior \emph{away} from correctness even as the user reveals additional evidence. Cross-turn sentence ablation on $n{=}20$ failed conversations identifies specific sentences whose individual removal flips the final answer wrong-to-right (mean flip rate $0.04$; $4/20$ conversations have detectable single-sentence anchors), consistent with the cliff: any retained commitment can perpetuate contamination.
 
-\paragraph{Why is the dose-response a cliff? A formal account.}
+\paragraph{Provisional content and the contamination cliff.}
 
-\begin{proposition}[Commitment-Contamination Cliff]
+We give a definition that captures the source of the bias and a theorem that predicts the cliff in a regime-independent form.
+
+\begin{definition}[Provisional content]\label{def:provisional}
+A unit of stored content $c$ is \emph{provisional} relative to evidence state $\mathcal{E}$ if $c$ was produced by a generator $\pi(\cdot \mid \mathcal{E}_{<})$ conditioned on a strict subset $\mathcal{E}_{<} \subsetneq \mathcal{E}$. Otherwise (user-revealed shards, successful tool observations, system-fixed instructions), $c$ is \emph{authoritative}.
+\end{definition}
+
+\begin{proposition}[Contamination Cliff]
 \label{prop:cliff}
-Let $y$ be the correct answer, $\mathcal{E}$ the full user-revealed evidence at decision time, and $a_{1:T}$ the sequence of prior assistant responses, each generated under a strict evidence subset $\mathcal{E}_{<t} \subsetneq \mathcal{E}$.
-Under standard chat rendering, the LLM posterior decomposes as
+Let $y$ be the correct answer, $\mathcal{E}$ the full evidence at decision time, and $C = \{c_1,\ldots,c_T\}$ a multiset of provisional content units, each $c_t$ generated under $\mathcal{E}_{<t} \subsetneq \mathcal{E}$. Under standard chat rendering the LLM posterior decomposes as
 \[
-p(y \mid \mathcal{E},\,a_{1:T}) \;\propto\;
+p(y \mid \mathcal{E},\,C) \;\propto\;
 \underbrace{p(y \mid \mathcal{E})}_{\text{evidence-conditioned}} \cdot
-\underbrace{\prod_{t=1}^{T} p(a_t \mid y,\,\mathcal{E}_{<t})}_{\text{commitment likelihood}}.
+\underbrace{\prod_{t=1}^{T} p(c_t \mid y,\,\mathcal{E}_{<t})}_{\text{commitment likelihood}}.
 \]
-For any retained subset $S \subseteq \{1,\ldots,T\}$ with $|S|>0$, the term $\prod_{t \in S} p(a_t \mid y,\mathcal{E}_{<t})$ persists and biases $p(y\mid\mathcal{E},a_S)$ whenever any $a_t$ committed to $y' \neq y$.
-The unique uncontaminated fixed point is $S=\emptyset$---full assistant-history removal.
+For any retained subset $S \subseteq \{1,\ldots,T\}$ with $|S|>0$, the term $\prod_{t \in S} p(c_t \mid y,\mathcal{E}_{<t})$ persists and biases $p(y\mid\mathcal{E},c_S)$ whenever any $c_t$ encodes a state inconsistent with $y$. The unique uncontaminated fixed point is $S=\emptyset$.
 \end{proposition}
 
 \begin{remark}[Textual reweighting cannot truncate]
 \label{rem:textual}
-Appending an ``this response is outdated'' annotation to $a_t$ changes the token distribution of the factor $p(a_t \mid y,\mathcal{E}_{<t})$ but leaves it non-zero.
-The Marked-History null result (Section~\ref{sec:cacheguard}) is the empirical confirmation of this prediction.
+Appending an ``this response is outdated'' annotation to $c_t$ changes the token distribution of $p(c_t \mid y,\mathcal{E}_{<t})$ but leaves it non-zero. The Marked-History null result (Section~\ref{sec:cacheguard}, Appendix~\ref{app:marked}) is the empirical confirmation: textual reweighting is a continuous deformation, not a truncation operator.
 \end{remark}
 
-The cliff at $K=1.0$ is therefore not an empirical surprise: Proposition~\ref{prop:cliff} predicts it as the unique bias-free operating point.
-Any retained assistant turn---regardless of position or recency---keeps the commitment likelihood active.
-This is why common heuristics such as ``keep only the most recent $k$ turns'' or ``keep attention-important tokens'' fail: they leave at least one commitment factor in the posterior.
-Partial truncation interpolates between contaminated states; only $S=\emptyset$ exits.
+\paragraph{Scope of the cliff.}
+Proposition~\ref{prop:cliff} is not specific to the multi-turn underspecified setting. Any agent regime that feeds model-generated content back as context---multi-turn chat, agentic step--observation loops, long chain-of-thought, summarization-based memory~\citep{wu2023recursivesumm}, iterative retrieval-augmented refinement---produces provisional content in the sense of Definition~\ref{def:provisional}. The corollary is that any compression or eviction policy that leaves a non-empty subset of provisional content in the posterior fails: heuristics such as ``keep recent $k$ turns'' or ``keep attention-important tokens'' (H2O, SnapKV, StreamingLLM) interpolate between contaminated states. Only an operator that types content by epistemic role---authoritative vs.\ provisional---and evicts the latter exits the contaminated regime. We empirically demonstrate this prediction on multi-turn underspecified chat (Section~\ref{sec:main-protocol}); cross-regime evidence in agentic loops, long CoT, and summarization-memory is a forward-looking direction (Section~\ref{sec:limitations}).
 
 \begin{table}[t]
 \centering
@@ -489,8 +515,11 @@ The forgetting primitive has analogs across disciplines that sharpen its status 
 \section{Limitations}
 \label{sec:limitations}
 
-\paragraph{Open-weight only; two benchmarks.}
-Our cross-model evaluation covers five open-weight models (Qwen2.5-7B, Qwen2.5-14B, Llama-3.1-8B, Mistral-7B-Instruct-v0.2, Gemma-2-9B-it); generalization to closed-source families (GPT, Claude) is plausible but unverified. Primary results use LiC and BFCL v4, supplemented by F1/F2 synthetics. Cross-benchmark validation on $\tau^2$-Bench~\citep{barres2025tau2bench}, MultiChallenge~\citep{weston2025multichallenge}, and additional BFCL subsets is left to future work. The miss-param subset ($N=30$) shows no CacheGuard advantage (0.167 vs.\ Sharded 0.233), consistent with our prediction that CacheGuard targets tool-state retention, not function-spec robustness.
+\paragraph{Cross-regime universality of the cliff.}
+Proposition~\ref{prop:cliff} predicts contamination in any regime that feeds model-generated content back as context: agentic step--observation loops (e.g., $\tau^2$-Bench~\citep{barres2025tau2bench}, SWE-Bench), long chain-of-thought reasoning (where intermediate conclusions are provisional---the intra-turn analog of our finding, partially covered by Thought Anchors~\citep{thoughtanchors2025}), summarization-based memory (where summaries inherit the source's provisional content, a prediction consistent with our Marked-History null), persona drift in dialog, and iterative retrieval-augmented refinement. Direct empirical demonstration in each regime is the most consequential next step. We have evidence in three settings (LiC underspecified chat, BFCL v4 stateful tool use, F1/F2 synthetics); a complete validation requires testing the corresponding forgetting operators in each regime above and is the highest-priority follow-up.
+
+\paragraph{Open-weight only.}
+Our cross-model evaluation covers five open-weight models (Qwen2.5-7B, Qwen2.5-14B, Llama-3.1-8B, Mistral-7B-Instruct-v0.2, Gemma-2-9B-it); generalization to closed-source families (GPT, Claude) is plausible but unverified. The miss-param BFCL subset ($N=30$) shows no CacheGuard advantage (0.167 vs.\ Sharded 0.233), consistent with our prediction that CacheGuard targets tool-state retention, not function-spec robustness.
 
 \paragraph{Reasoning models.}
 We do not fully evaluate reasoning models (o3, DeepSeek-R1, QwQ). \citet{laban2025lost} report that on LiC these models degrade similarly to non-reasoning models, with extra test-time compute providing no recovery---consistent with our framing: the reasoning chain is generated \emph{after} the anchored prior commitments are rendered into the context window, so anchors are in-context during the entire trace. The prediction is that \textsc{Fresh-Last} should still help, since the anchoring mechanism is upstream of the reasoning trace. Preliminary evaluation of DeepSeek-R1-Distill-7B on \texttt{multi\_mca24} is underway (vLLM on GPU port 8006); full cross-model results including reasoning models are left to follow-up.
