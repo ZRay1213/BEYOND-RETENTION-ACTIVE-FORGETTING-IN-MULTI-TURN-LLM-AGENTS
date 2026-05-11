@@ -143,15 +143,16 @@ Forgetting can act at five granularities, each with a different domain of validi
 \caption{Forgetting-operation taxonomy. Each operator differs in what it removes from the LLM's effective context. Coarser operators are simpler but lose authoritative content; finer operators need a typing signal.}
 \label{tab:forget-taxonomy}
 \small
-\begin{tabular}{lp{0.32\linewidth}p{0.42\linewidth}}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.17\linewidth}p{0.36\linewidth}p{0.39\linewidth}}
 \toprule
 Granularity & Operator & Domain of validity \\
 \midrule
-Token-level & Zero attention to a token set (no token deletion) & Where eviction would break cache structure; useful when the same context is reused with multiple decision points (S8b). \\
-Sentence-level & Drop specific sentences within a turn & Intra-turn reasoning (Thought Anchors~\citep{thoughtanchors2025}); cross-turn extension in Appendix~\ref{app:anchor-id}. \\
-Turn-level (uniform) & Drop all prior assistant turns at decision time (\textsc{Fresh-Last}/\textsc{Fresh-Every}) & Stateless reasoning where every assistant turn is provisional. Fails when some assistant content carries verified state. \\
-Block-typed & Drop blocks classified as provisional, retain authoritative (\textsc{CacheGuard}) & Mixed regimes with both kinds of content (BFCL v4: tool calls + tool results are authoritative, asst-text is provisional). \\
-Conversation-level & Reset all context per query (\textsc{Concat}) & Bounded single-shot evaluation; loses history information. \\
+Token-attention & Zero attention to a token set (no deletion) & Cases where eviction would break cache structure (S8b). \\
+Sentence & Drop specific sentences within a turn & Intra-turn CoT~\citep{thoughtanchors2025}; cross-turn in App.~\ref{app:anchor-id}. \\
+Turn-uniform & Drop all prior assistant turns (Fresh-Last / Fresh-Every) & Stateless reasoning where every assistant turn is provisional. Fails when some assistant content carries verified state. \\
+Block-typed & Drop provisional, retain authoritative (CacheGuard) & Mixed regimes (BFCL v4: tool calls and results are authoritative; asst-text is provisional). \\
+Conversation-reset & Rebuild context per query (Concat) & Bounded single-shot; loses history. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -676,7 +677,8 @@ All bootstrap tests use $B=10{,}000$ iterations with common-task pairing on the 
 \centering
 \caption{Paired bootstrap pairwise tests on multi\_heldout (Qwen2.5-14B unless noted). $p$ is one-sided. Significance at $\alpha=0.05$.}
 \label{tab:paired}
-\begin{tabular}{lcccc}
+\small
+\begin{tabular}{p{0.46\linewidth}cccc}
 \toprule
 Comparison & $\Delta$ & 95\% CI on $\Delta$ & $p$ & sig \\
 \midrule
@@ -848,25 +850,20 @@ We ran the cross-turn sentence ablation on $n{=}20$ failed sharded conversations
 
 The clearest single-anchor flip in the experiment comes from a math conversation (\texttt{sharded-GSM8K/651}, 7 assistant turns, Qwen2.5-14B-Instruct). The first user shard underspecifies the problem (asks about totals without revealing the input numbers); the assistant correctly recognizes this and asks for clarification, but the form of the clarification commits the model to a stance (``data is missing'') that persists through the rest of the conversation:
 
-\smallskip
-\begin{center}
+\begin{quote}
 \small
-\begin{tabular}{p{0.93\linewidth}}
-\toprule
-\textbf{Turn 1 (Asst, original \textsc{Sharded}):} ``\underline{To accurately calculate Ariadne's total sales for March and April, we need specific data regarding her sales for those months.} \underline{Since the actual sales figures are not provided in your question, I will outline the steps to calculate her total sales once you have the necessary data.} [\ldots steps follow\ldots]'' \\
-\midrule
-\textbf{Turn 7 (Asst, \textsc{Sharded} final):} response repeats the steps abstractly without committing to a numeric answer. Score: $0$ (gold = ``5''). \\
-\midrule
-\textbf{Turn 7 (Asst, after dropping either underlined sentence):} model now produces a numeric answer. Score: $1$. \\
-\midrule
-\textit{Anchor sentences} (both flip the outcome individually):
+\textbf{Turn 1 (Asst, original \textsc{Sharded}):} ``\textbf{[anchor 1]} To accurately calculate Ariadne's total sales for March and April, we need specific data regarding her sales for those months. \textbf{[anchor 2]} Since the actual sales figures are not provided in your question, I will outline the steps to calculate her total sales once you have the necessary data. [\ldots steps follow\ldots]''
+
+\textbf{Turn 7 (Asst, \textsc{Sharded} final):} response repeats the steps abstractly without committing to a numeric answer. Score: $0$ (gold $= 5$).
+
+\textbf{Turn 7 (Asst, after dropping either anchor sentence):} model now produces a numeric answer. Score: $1$.
+
+\textit{Anchor sentences} (each individually flips the outcome wrong-to-right when removed):
 \begin{itemize}\itemsep1pt
-  \item ``To accurately calculate Ariadne's total sales for March and April, we need specific data regarding her sales for those months.'' (Turn 1, sentence 0)
-  \item ``Since the actual sales figures are not provided in your question, I will outline the steps to calculate her total sales once you have the necessary data.'' (Turn 1, sentence 1)
-\end{itemize} \\
-\bottomrule
-\end{tabular}
-\end{center}
+  \item Anchor 1: ``To accurately calculate Ariadne's total sales for March and April, we need specific data regarding her sales for those months.'' (Turn 1, sentence 0)
+  \item Anchor 2: ``Since the actual sales figures are not provided in your question, I will outline the steps to calculate her total sales once you have the necessary data.'' (Turn 1, sentence 1)
+\end{itemize}
+\end{quote}
 
 \smallskip\noindent Both sentences are early commitments to a meta-stance (``need more data'' / ``will outline the steps''). When either sentence is in context, every subsequent turn defaults back to outlining steps rather than computing; when removed, the same model on the same conversation produces the correct numeric answer. The anchor here is structural rather than factual---the model is anchored on a \emph{response mode}, not a wrong value. This generalizes the F1-additive intuition: commitments come in many forms (numerical, factual, modal), and any of them can chain forward.
 
