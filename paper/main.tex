@@ -294,9 +294,42 @@ The implication for typed forgetting is sharper, not weaker: \textbf{uniform for
 
 We demonstrate the prediction directly on multi-turn underspecified chat (Section~\ref{sec:main-protocol}), on stateful tool use (Section~\ref{sec:bfcl}), and---with regime-conditional interpretation---on summarization-based memory above. Empirical validation in the remaining regimes (agentic loops, long CoT, persona drift) is the highest-priority follow-up (Section~\ref{sec:limitations}).
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.74\linewidth, height=5.2cm,
+    xlabel={$K$ (fraction of prior assistant messages dropped)},
+    ylabel={Accuracy},
+    xmin=-0.05, xmax=1.05, ymin=0.0, ymax=0.9,
+    xtick={0, 0.25, 0.5, 0.75, 1.0},
+    ytick={0, 0.2, 0.4, 0.6, 0.8},
+    grid=both, grid style={line width=0.1pt, draw=gray!25},
+    legend pos=north west, legend style={font=\footnotesize},
+]
+\addplot[color=red!80, mark=square*, thick] coordinates {
+    (0, 0.208) (0.25, 0.354) (0.5, 0.235) (0.75, 0.333) (1.0, 0.771)
+};
+\addlegendentry{Drop-EARLIEST (Qwen-14B)};
+\addplot[color=red!50, mark=triangle*, thick, dashed] coordinates {
+    (0, 0.208) (0.25, 0.253) (0.5, 0.242) (0.75, 0.278) (1.0, 0.771)
+};
+\addlegendentry{Drop-LATEST (Qwen-14B)};
+\addplot[color=blue!80, mark=*, thick] coordinates {
+    (0, 0.139) (0.5, 0.185) (1.0, 0.651)
+};
+\addlegendentry{Drop-EARLIEST (Llama-8B)};
+\addplot[color=gray!60, mark=none, dotted, thick] coordinates {(0, 0.854) (1.0, 0.854)};
+\addlegendentry{Concat ceiling (Qwen-14B)};
+\end{axis}
+\end{tikzpicture}
+\caption{Selective-drop dose-response visualized. Both architectures show a near-flat plateau through $K{\in}[0.25, 0.75]$ followed by a sharp cliff at $K{=}1.0$. The partial-drop region (4--23\% gap recovery) is statistically not significantly above Sharded; the cliff at $K{=}1.0$ (87\% recovery on Qwen, 84\% on Llama) is the dominant feature.}
+\label{fig:dose-curve}
+\end{figure}
+
 \begin{table}[t]
 \centering
-\caption{Selective-drop dose-response on multi\_heldout. $K$ is the fraction of prior assistant messages dropped. Drop-EARLIEST removes earliest $K$, Drop-LATEST removes latest $K$. $K=0$ is the standard Sharded protocol; $K=1.0$ Drop-EARLIEST is Fresh-Last. The cliff at $K=1.0$ dominates and replicates on Llama-3.1-8B (bottom block). Llama block uses $K\in\{0,0.5,1.0\}$ (three-point sweep); Qwen block uses four intermediate values.}
+\caption{Selective-drop dose-response on multi\_heldout. $K$ is the fraction of prior assistant messages dropped. Drop-EARLIEST removes earliest $K$, Drop-LATEST removes latest $K$. $K=0$ is the standard Sharded protocol; $K=1.0$ Drop-EARLIEST is Fresh-Last. The cliff at $K=1.0$ dominates and replicates on Llama-3.1-8B (bottom block). See Figure~\ref{fig:dose-curve} for the visualization.}
 \label{tab:dose}
 \begin{tabular}{lccc}
 \toprule
@@ -559,7 +592,31 @@ Among the $N=200$ BFCL base instances, \textsc{CacheGuard} and \textsc{Sharded} 
 Our mPCHR is a message-level approximation to vLLM's token-level prefix cache hit rate; the two diverge for \textsc{Fresh-Every} where user content extends rather than rebuilds per turn. The attention measurements in Section~\ref{sec:attention-probe} are correlational at the probe level and only weakly supportive at the causal level (Appendix~\ref{app:attn-patch}, $n=12$): a 2D attention mask alone does not produce the recovery achieved by token-level truncation, indicating that ``retained subset'' in Proposition~\ref{prop:cliff} must be read at the renderer layer rather than the attention layer. A stronger causal intervention via per-layer hooks or K/V value zeroing is left for follow-up.
 
 \paragraph{HCHR empirical ($n{=}80$).}
-The pilot HCHR $= 0.16$ on $n{=}5$ reported in earlier versions of this work is refined here. On $n{=}80$ failed sharded conversations (Qwen2.5-14B on math and data2text; per-block ablation: each prior assistant block individually removed, score regraded), mean HCHR $= 0.052$ with 95\% bootstrap CI $[0.022, 0.087]$. The CI excludes zero, so HCHR is non-trivially nonzero but small. 11 of 80 conversations contain at least one harmful block; the per-position distribution is monotone in turn index for the first four turns: turn 0 almost never harmful ($0.013$, $n{=}80$), turn 1: $0.050$, turn 2: $0.062$, turn 3: $0.089$ ($n{=}79$), turn 4: $0.039$ ($n{=}77$). Deep-turn rate (turn 5: $0.182$, $n{=}11$) is consistent with the trend but small-$n$. This is the expected pattern under Proposition~\ref{prop:cliff}: any single block individually rarely lifts a contaminated conversation (because the other retained provisional content also contributes a likelihood factor), but as turns accumulate any single block becomes proportionally more likely to be the dominant anchor. The cliff explanation predicts low HCHR (most single blocks do not solo-flip) but non-zero HCHR (in some cases a single block is the dominant anchor), which is what we observe.
+The pilot HCHR $= 0.16$ on $n{=}5$ reported in earlier versions of this work is refined here. On $n{=}80$ failed sharded conversations (Qwen2.5-14B on math and data2text; per-block ablation: each prior assistant block individually removed, score regraded), mean HCHR $= 0.052$ with 95\% bootstrap CI $[0.022, 0.087]$. The CI excludes zero, so HCHR is non-trivially nonzero but small. 11 of 80 conversations contain at least one harmful block; the per-position distribution (Figure~\ref{fig:hchr-position}) is monotone in turn index for the first four turns: turn 0 almost never harmful ($0.013$, $n{=}80$), turn 1: $0.050$, turn 2: $0.062$, turn 3: $0.089$ ($n{=}79$), turn 4: $0.039$ ($n{=}77$). Deep-turn rate (turn 5: $0.182$, $n{=}11$) is consistent with the trend but small-$n$. This is the expected pattern under Proposition~\ref{prop:cliff}: any single block individually rarely lifts a contaminated conversation (because the other retained provisional content also contributes a likelihood factor), but as turns accumulate any single block becomes proportionally more likely to be the dominant anchor. The cliff explanation predicts low HCHR (most single blocks do not solo-flip) but non-zero HCHR (in some cases a single block is the dominant anchor), which is what we observe.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.78\linewidth, height=4.6cm,
+    ybar, bar width=14pt,
+    xlabel={Prior assistant turn index},
+    ylabel={Per-position HCHR},
+    xmin=-0.6, xmax=5.6, ymin=0.0, ymax=0.22,
+    xtick={0,1,2,3,4,5},
+    ytick={0, 0.05, 0.10, 0.15, 0.20},
+    grid=both, grid style={line width=0.1pt, draw=gray!25},
+    nodes near coords={\scriptsize\pgfmathprintnumber[fixed,precision=3]{\pgfplotspointmeta}},
+    nodes near coords align={vertical},
+]
+\addplot[fill=red!50, draw=red!80] coordinates {
+    (0, 0.013) (1, 0.050) (2, 0.062) (3, 0.089) (4, 0.039) (5, 0.182)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Per-position HCHR on $n{=}80$ failed sharded conversations (Qwen2.5-14B). Turn 0 (the first provisional commitment) is almost never solo-flippable. The rate climbs monotonically through turn 3 ($0.089$), drops at turn 4 ($n{=}77$), and spikes at turn 5 ($n{=}11$, small sample). The mean HCHR across positions is $0.052$ with bootstrap CI $[0.022, 0.087]$.}
+\label{fig:hchr-position}
+\end{figure}
 
 \paragraph{Rule-based eligibility controller.}
 \textsc{CacheGuard}'s eligibility logic is hand-written and could fail on non-standard interaction patterns. A learned eligibility classifier is a natural extension but out of scope.
