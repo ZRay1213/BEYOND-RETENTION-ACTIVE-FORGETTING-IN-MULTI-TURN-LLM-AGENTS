@@ -275,23 +275,24 @@ The cliff is not an empirical curiosity. Standard transformer inference offers n
 \paragraph{Scope of the cliff.}
 Proposition~\ref{prop:cliff} predicts contamination in any regime where the model's prior outputs are persisted and rendered as implicit ground truth: multi-turn chat, agentic step--observation loops~\citep{stechly2024brittle,taubench2024}, long chain-of-thought~\citep{thoughtanchors2025,curseofcot2025} (the intra-turn version), summarization-based memory~\citep{wu2023recursivesumm}, persona drift in dialog~\citep{lee2024personadrift}, and iterative retrieval-augmented refinement. The scope condition is ``implicit ground truth'': two regimes that explicitly relabel prior outputs avoid the cliff. (i) Reflexion~\citep{shinn2023reflexion} feeds prior outputs back tagged as \emph{failure traces}, which the model learns to use diagnostically. (ii) Self-consistency~\citep{wang2023selfconsistency} samples multiple parallel chains and discards them at the answer-aggregation step; sequential accumulation never occurs. The structural cause---rendering provisional content as authoritative---is absent in both.
 
-\paragraph{Cross-regime empirical: summarization-based memory inherits contamination.}
-We directly test the summarization-memory prediction on $n{=}12$ failed sharded math conversations (Qwen2.5-14B). Three conditions: (i) \textsc{Sharded} baseline (full history), (ii) \textsc{Fresh-Last} (drop all prior assistant turns), (iii) \textsc{Summary-Memory} where we prompt the model to summarize the prior history into a single paragraph and then run generation on \texttt{[system + summary + final user]}. If summarization successfully strips contamination, \textsc{Summary-Memory} should approach \textsc{Fresh-Last}; if the summary inherits the contamination (because the summary itself is provisional content produced by the same model under partial information), \textsc{Summary-Memory} should approach \textsc{Sharded}.
+\paragraph{Cross-regime empirical: summarization-based memory, task-dependent.}
+We test the summarization-memory prediction on failed sharded conversations (Qwen2.5-14B). Three conditions: (i) \textsc{Sharded} baseline, (ii) \textsc{Fresh-Last} (drop all prior assistant turns), (iii) \textsc{Summary-Memory} (prompt the model to summarize the prior history into one paragraph, then run on \texttt{[system + summary + final user]}). We aggregate by task because the contamination tradeoff depends on whether the answer is discrete (math) or free-form (data2text).
 \begin{center}
 \small
-\begin{tabular}{lc}
+\begin{tabular}{lccc}
 \toprule
-Condition & Math accuracy \\
+Task & \textsc{Sharded} & \textsc{Fresh-Last} & \textsc{Summary} \\
 \midrule
-\textsc{Sharded} (full history) & 0.333 \\
-\textsc{Fresh-Last} (truncate) & \textbf{0.417} \\
-\textsc{Summary-Memory} (replace history with summary) & 0.333 \\
+Math ($n{=}12$; discrete answer) & 0.333 & \textbf{0.417} & 0.333 \\
+Data2Text ($n{=}37$; free-form generation) & 0.297 & 0.108 & \textbf{0.514} \\
 \bottomrule
 \end{tabular}
 \end{center}
-\noindent\textsc{Summary-Memory} matches \textsc{Sharded} exactly and fails to reach \textsc{Fresh-Last}---the summary inherits the contamination. The summary text contains the same fabricated commitments and provisional answers as the original assistant turns; replacing many tokens with fewer tokens does not change the epistemic type of those tokens. The cliff prediction holds: a forgetting operator that compresses but does not type cannot escape contamination. This rules out summarization-based memory frameworks~\citep{wu2023recursivesumm,packer2023memgpt,lee2024readagent} as solutions to the multi-turn anchoring problem in the absence of typed eviction.
+\noindent On math the cliff prediction holds: \textsc{Summary} ($0.333$) matches \textsc{Sharded} ($0.333$) and falls short of \textsc{Fresh-Last} ($0.417$). The summary preserves the wrong numerical commitment from prior turns, and a discrete answer either matches gold or does not. On data2text the ordering inverts: \textsc{Summary} ($0.514$) beats \textsc{Sharded} ($0.297$) which beats \textsc{Fresh-Last} ($0.108$). Two mechanisms compete in the free-form regime: (a) the cliff cost---the summary contains provisional content---and (b) evidence loss from truncation---\textsc{Fresh-Last} removes the format and style demonstrations carried in prior assistant turns, which are particularly useful for generative tasks where the model otherwise has only a structured table or schema. On free-form generation, (b) dominates: full removal loses too much format signal, while the summary re-consolidates content into a coherent form that helps more than the residual contamination hurts.
 
-We demonstrate the prediction directly on multi-turn underspecified chat (Section~\ref{sec:main-protocol}), on stateful tool use (Section~\ref{sec:bfcl}), and on summarization-based memory above. Empirical validation in the remaining regimes (agentic loops, long CoT, persona drift) is the highest-priority follow-up (Section~\ref{sec:limitations}).
+The implication for typed forgetting is sharper, not weaker: \textbf{uniform forgetting fails differently across regimes}---it under-forgets on math (cliff cost dominates) and over-forgets on data2text (evidence-loss cost dominates). Only a typed evictor that conditions on the epistemic role of each block can navigate both directions. \textsc{CacheGuard}'s typed eligibility (\texttt{assistant\_artifact} as referenced state vs.\ \texttt{assistant\_claim} as provisional) is the architectural mechanism for this; the data2text result is the empirical motivation that uniform turn-dropping does not generalize.
+
+We demonstrate the prediction directly on multi-turn underspecified chat (Section~\ref{sec:main-protocol}), on stateful tool use (Section~\ref{sec:bfcl}), and---with regime-conditional interpretation---on summarization-based memory above. Empirical validation in the remaining regimes (agentic loops, long CoT, persona drift) is the highest-priority follow-up (Section~\ref{sec:limitations}).
 
 \begin{table}[t]
 \centering
