@@ -305,6 +305,8 @@ We demonstrate the prediction directly on multi-turn underspecified chat (Sectio
     xmin=-0.05, xmax=1.05, ymin=0.0, ymax=0.9,
     xtick={0, 0.25, 0.5, 0.75, 1.0},
     ytick={0, 0.2, 0.4, 0.6, 0.8},
+    yticklabel style={/pgf/number format/.cd, fixed, precision=1},
+    xticklabel style={/pgf/number format/.cd, fixed, precision=2},
     grid=both, grid style={line width=0.1pt, draw=gray!25},
     legend pos=north west, legend style={font=\footnotesize},
 ]
@@ -365,6 +367,8 @@ Table~\ref{tab:pareto} reports the three cache metrics alongside accuracy for al
     xlabel={Physical Cache Hit Rate (PCHR, message-level proxy)},
     ylabel={Task Accuracy},
     xmin=-0.05, xmax=1.05, ymin=0.15, ymax=1.0,
+    xticklabel style={/pgf/number format/.cd, fixed, precision=2},
+    yticklabel style={/pgf/number format/.cd, fixed, precision=1},
     grid=both,
     grid style={line width=0.1pt, draw=gray!30},
     legend pos=outer north east, legend cell align=left,
@@ -606,8 +610,9 @@ The pilot HCHR $= 0.16$ on $n{=}5$ reported in earlier versions of this work is 
     xmin=-0.6, xmax=5.6, ymin=0.0, ymax=0.22,
     xtick={0,1,2,3,4,5},
     ytick={0, 0.05, 0.10, 0.15, 0.20},
+    yticklabel style={/pgf/number format/.cd, fixed, fixed zerofill, precision=2},
     grid=both, grid style={line width=0.1pt, draw=gray!25},
-    nodes near coords={\scriptsize\pgfmathprintnumber[fixed,precision=3]{\pgfplotspointmeta}},
+    nodes near coords={\scriptsize\pgfmathprintnumber[fixed, fixed zerofill, precision=3]{\pgfplotspointmeta}},
     nodes near coords align={vertical},
 ]
 \addplot[fill=red!50, draw=red!80] coordinates {
@@ -824,6 +829,7 @@ Figure~\ref{fig:per-turn} reports per-turn accuracy on $n{=}80$ \textsc{Sharded}
     xmin=-0.3, xmax=7.3, ymin=0.0, ymax=1.05,
     xtick={0,1,2,3,4,5,6,7},
     ytick={0,0.2,0.4,0.6,0.8,1.0},
+    yticklabel style={/pgf/number format/.cd, fixed, precision=1},
     grid=both,
     grid style={line width=0.1pt, draw=gray!25},
     legend pos=north west,
