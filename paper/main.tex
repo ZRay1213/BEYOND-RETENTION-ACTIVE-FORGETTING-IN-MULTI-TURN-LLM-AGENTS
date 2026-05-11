@@ -381,6 +381,9 @@ Marked-History & 0.755 & 0.570 & 0.307 & H1 over H3 \\
 
 This directly indicts attention-salience-based KV compression: H2O~\citep{zhang2023h2o}, StreamingLLM~\citep{xiao2024streamingllm}, and SnapKV~\citep{li2024snapkv} all rank tokens by attention contribution and preferentially retain high-attention tokens. In multi-turn agent settings these are precisely the harmful anchors, not the valid evidence. Validity requires an epistemic source label, not an attention score---the same conclusion reached independently by~\citet{wang2025proactive}, who show prompt-level instructions to ``ignore earlier inputs'' fail to dislodge proactive interference. Full measurements are in Appendix~\ref{app:attn}.
 
+\paragraph{Causal patch: attention-zero is not equivalent to truncation.}
+The correlational probe is consistent with attention-mediated anchoring but is not a causal test. We run the causal complement: on $n{=}12$ failed sharded math conversations (Qwen2.5-7B, HF eager), at the final generation step we construct a 2D attention mask that zeros all prior \texttt{assistant} token positions, leaving \texttt{user}/\texttt{system} positions intact. The intent is to test whether generation queries blocked from attending to prior assistant tokens recover the answer (the prediction of pure-attention H1). They do not: baseline accuracy 0.333 vs.\ patch-asst 0.250, with zero conversations flipping wrong-to-right. A control that masks user-evidence positions instead leaves accuracy at 0.333. Inspection of patched generations shows characteristic token-repetition artifacts (``Let let's'') consistent with RoPE positional disruption---the assistant tokens still occupy position slots between user evidence and the current turn, so the current turn's effective position is unchanged even when attention to those slots is zero. Mechanistically: \textbf{truncation (Fresh-Last, which removes tokens and shifts positions) is not equivalent to attention masking}. Removal of the token is structurally distinct from removal of the attention pathway. This refines our cliff claim. Proposition~\ref{prop:cliff} predicts that any retained provisional content perpetuates contamination; the empirical refinement is that ``retention'' must be interpreted at the storage layer (the token is present in the rendered context), not at the attention layer (the query can or cannot attend to it). A serving-layer forgetting primitive must therefore operate on rendered context, not on attention weights. Full results in Appendix~\ref{app:attn-patch}.
+
 \subsection{Cross-benchmark: synthetic benchmarks (F1 and F2)}
 \label{sec:f1-synthetic}
 
@@ -787,6 +790,45 @@ The clearest single-anchor flip in the experiment comes from a math conversation
 
 \paragraph{Companion data2text case (fabrication anchor).}
 A second conversation (\texttt{sharded-totto}-Pinckney) shows a complementary failure mode where the model fabricates specific factual claims early and then anchors. The gold output records that John M.\ Pinckney died on April 24, 1905; the model committed to ``passed away on February 16, 1905'' in a turn-4 response and produced fabricated successor-dates downstream. 17 of 30 tested sentences in this conversation flip wrong-to-right when removed---most are fabricated dates, names, or speculative process descriptions. This case illustrates that on knowledge-intensive tasks, anchoring extends to manufactured evidence: the model treats its own earlier fabrications as authoritative input on later turns.
+
+\section{Causal attention patching}
+\label{app:attn-patch}
+
+We test the causal version of the attention-anchoring claim by intervening directly on the attention pathway. For each failed sharded math conversation (Qwen2.5-7B, HuggingFace transformers with \texttt{attn\_implementation="eager"}), we use the chat template to render the full conversation, identify token ranges belonging to each block type, and construct three rollouts:
+
+\begin{itemize}\itemsep0pt
+    \item \textsc{baseline}: standard generation, attention mask of all ones (the rendered sharded context).
+    \item \textsc{patch-asst}: attention mask zeroed at all token positions belonging to prior assistant turns. Generation queries cannot attend to those positions.
+    \item \textsc{patch-user}: same construction, but applied to user-evidence positions instead (control). Removing valid evidence should not recover accuracy.
+\end{itemize}
+
+Generation is greedy, max 500 new tokens. Math grading is exact-match with $\backslash\!$ \texttt{boxed} and \texttt{\#\#\#\#} pattern extraction, falling back to last-numeric extraction.
+
+\paragraph{Results.}
+On $n{=}12$ conversations (after filtering for $\geq 2$ prior assistant turns and tokenizable templates):
+
+\begin{center}
+\small
+\begin{tabular}{lcc}
+\toprule
+Condition & Acc & vs.\ baseline \\
+\midrule
+baseline (sharded re-run) & 0.333 & --- \\
+patch-asst (mask asst positions) & 0.250 & $-0.083$ \\
+patch-user (mask user positions, control) & 0.333 & $0.000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Score distributions: 8 conversations are wrong in all three conditions; 3 are correct in all three (easy to the model); 1 case is correct in baseline and patch-user but wrong in patch-asst (the mask broke a correct answer). Zero conversations flip wrong-to-right under patch-asst.
+
+\paragraph{Interpretation.}
+The patch-asst condition does not recover, but the textual content of generations changes (we save the first 200 chars of each prediction in the per-conversation log). Inspection reveals token-repetition artifacts (e.g., ``Let let's'') in several patch-asst outputs that are not present in baseline or patch-user. These are consistent with RoPE positional disruption: the assistant tokens still occupy position slots between user evidence and the current turn, so even when the current turn cannot attend to them, the current turn's effective position is unchanged from baseline. By contrast, \textsc{Fresh-Last} (Section~\ref{sec:main-protocol}) removes the tokens entirely and shifts the current turn's position to immediately follow user evidence, recovering the gap.
+
+The empirical contrast---attention-mask $\approx$ baseline, token-removal $\approx$ Concat---identifies the operative axis as \emph{rendered context structure} rather than \emph{attention pathway alone}. Proposition~\ref{prop:cliff}'s ``retained subset'' must be read as ``retained in the rendered context fed to the forward pass,'' not ``retained in the attention computation.'' A KV-eviction or attention-compression method that operates after the rendered context is fixed (which is what H2O, SnapKV, StreamingLLM all do) cannot achieve the active-forgetting effect we describe, even if it could perfectly zero attention to provisional tokens. This is a structural reason---not merely an empirical one---why our forgetting primitive must operate at the renderer layer.
+
+\paragraph{Caveats.}
+$n{=}12$ is small (15 conversations skipped for tokenization-template edge cases out of an attempted $n{=}20$). The control (patch-user) does not drop below baseline, suggesting some of the failure modes are robust to which positions are masked. A stronger causal version of this experiment---ablating attention via forward hooks at specific layers, or zeroing K/V values rather than the attention mask---is left for future work; the negative-result reading is conservative and supports the structural claim either way.
 
 \section{CacheGuard algorithm}
 \label{app:algorithm}
