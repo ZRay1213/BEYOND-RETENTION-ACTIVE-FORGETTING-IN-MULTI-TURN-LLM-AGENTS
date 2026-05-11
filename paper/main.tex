@@ -273,7 +273,25 @@ Appending an ``this response is outdated'' annotation to $c_t$ changes the token
 The cliff is not an empirical curiosity. Standard transformer inference offers no partial-conditioning regime: a prefix token either contributes to the attention computation or it does not. Continuous interventions on \emph{content} (e.g., textual annotation, paraphrase, soft markers) modify the token distribution of the provisional factor but cannot reduce its likelihood contribution to zero, leaving the posterior in a contaminated state. The Marked-History null (Section~\ref{sec:cacheguard}) is the empirical confirmation. Truncation---in token space, attention space, or a typed-block evictor---is the only operator that exits the contamination.
 
 \paragraph{Scope of the cliff.}
-Proposition~\ref{prop:cliff} predicts contamination in any regime where the model's prior outputs are persisted and rendered as implicit ground truth: multi-turn chat, agentic step--observation loops~\citep{stechly2024brittle,taubench2024}, long chain-of-thought~\citep{thoughtanchors2025,curseofcot2025} (the intra-turn version), summarization-based memory~\citep{wu2023recursivesumm}, persona drift in dialog~\citep{lee2024personadrift}, and iterative retrieval-augmented refinement. The scope condition is ``implicit ground truth'': two regimes that explicitly relabel prior outputs avoid the cliff. (i) Reflexion~\citep{shinn2023reflexion} feeds prior outputs back tagged as \emph{failure traces}, which the model learns to use diagnostically. (ii) Self-consistency~\citep{wang2023selfconsistency} samples multiple parallel chains and discards them at the answer-aggregation step; sequential accumulation never occurs. The structural cause---rendering provisional content as authoritative---is absent in both. We demonstrate the prediction directly on multi-turn underspecified chat (Section~\ref{sec:main-protocol}) and partially on stateful tool use (Section~\ref{sec:bfcl}); empirical validation in the remaining regimes is the highest-priority follow-up (Section~\ref{sec:limitations}).
+Proposition~\ref{prop:cliff} predicts contamination in any regime where the model's prior outputs are persisted and rendered as implicit ground truth: multi-turn chat, agentic step--observation loops~\citep{stechly2024brittle,taubench2024}, long chain-of-thought~\citep{thoughtanchors2025,curseofcot2025} (the intra-turn version), summarization-based memory~\citep{wu2023recursivesumm}, persona drift in dialog~\citep{lee2024personadrift}, and iterative retrieval-augmented refinement. The scope condition is ``implicit ground truth'': two regimes that explicitly relabel prior outputs avoid the cliff. (i) Reflexion~\citep{shinn2023reflexion} feeds prior outputs back tagged as \emph{failure traces}, which the model learns to use diagnostically. (ii) Self-consistency~\citep{wang2023selfconsistency} samples multiple parallel chains and discards them at the answer-aggregation step; sequential accumulation never occurs. The structural cause---rendering provisional content as authoritative---is absent in both.
+
+\paragraph{Cross-regime empirical: summarization-based memory inherits contamination.}
+We directly test the summarization-memory prediction on $n{=}12$ failed sharded math conversations (Qwen2.5-14B). Three conditions: (i) \textsc{Sharded} baseline (full history), (ii) \textsc{Fresh-Last} (drop all prior assistant turns), (iii) \textsc{Summary-Memory} where we prompt the model to summarize the prior history into a single paragraph and then run generation on \texttt{[system + summary + final user]}. If summarization successfully strips contamination, \textsc{Summary-Memory} should approach \textsc{Fresh-Last}; if the summary inherits the contamination (because the summary itself is provisional content produced by the same model under partial information), \textsc{Summary-Memory} should approach \textsc{Sharded}.
+\begin{center}
+\small
+\begin{tabular}{lc}
+\toprule
+Condition & Math accuracy \\
+\midrule
+\textsc{Sharded} (full history) & 0.333 \\
+\textsc{Fresh-Last} (truncate) & \textbf{0.417} \\
+\textsc{Summary-Memory} (replace history with summary) & 0.333 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent\textsc{Summary-Memory} matches \textsc{Sharded} exactly and fails to reach \textsc{Fresh-Last}---the summary inherits the contamination. The summary text contains the same fabricated commitments and provisional answers as the original assistant turns; replacing many tokens with fewer tokens does not change the epistemic type of those tokens. The cliff prediction holds: a forgetting operator that compresses but does not type cannot escape contamination. This rules out summarization-based memory frameworks~\citep{wu2023recursivesumm,packer2023memgpt,lee2024readagent} as solutions to the multi-turn anchoring problem in the absence of typed eviction.
+
+We demonstrate the prediction directly on multi-turn underspecified chat (Section~\ref{sec:main-protocol}), on stateful tool use (Section~\ref{sec:bfcl}), and on summarization-based memory above. Empirical validation in the remaining regimes (agentic loops, long CoT, persona drift) is the highest-priority follow-up (Section~\ref{sec:limitations}).
 
 \begin{table}[t]
 \centering
@@ -536,8 +554,11 @@ A natural objection is that 128K+ context models trivially absorb the multi-turn
 \paragraph{CacheGuard eligibility boundary on mixed-API tasks.}
 Among the $N=200$ BFCL base instances, \textsc{CacheGuard} and \textsc{Sharded} disagree on 33 instances: \textsc{Sharded}-only correct (18) and \textsc{CacheGuard}-only correct (15). The \textsc{Sharded}-only cases are concentrated in combined MessageAPI$+$TradingBot tasks, where the assistant's prior \textit{text} rationale appears to carry portfolio or thread-context summaries that the mock backend does not expose via explicit tool results. Our current eligibility rule (drop all \texttt{asst\_text}) therefore discards valid informational state in these cases. The \textsc{CacheGuard}-only cases are predominantly single-API TradingBot tasks, where dropped rationale was a stale incorrect intermediate plan. This suggests that \texttt{asst\_text} blocks occupy a spectrum between pure provisional claims and partially-valid state summaries; the binary drop rule is an approximation that wins on average but leaves room for finer-grained eligibility based on content type.
 
-\paragraph{Approximate PCHR, unpopulated HCHR, and correlational attention.}
-Our mPCHR is a message-level approximation to vLLM's token-level prefix cache hit rate; the two diverge for \textsc{Fresh-Every} where user content extends rather than rebuilds per turn. HCHR, as defined in Section~\ref{sec:metrics}, requires counterfactual per-block ablations to evaluate whether removing a block flips the outcome; this computation is expensive at scale. A five-conversation pilot on failed math sharded conversations (Qwen2.5-14B, $n=5$) finds mean HCHR $= 0.16$: individual block drops rarely recover accuracy, consistent with Proposition~\ref{prop:cliff}'s prediction that any retained commitment perpetuates contamination (partial removal fails; full removal succeeds). Full-scale empirical HCHR measurement is left for follow-up. The attention measurements in Section~\ref{sec:attention-probe} ($n=22$ failed sharded BFCL conversations) are correlational; causal interventions (attention patching, KV-block ablation) would more rigorously establish the anchoring mechanism but are left for follow-up.
+\paragraph{Approximate PCHR; correlational attention.}
+Our mPCHR is a message-level approximation to vLLM's token-level prefix cache hit rate; the two diverge for \textsc{Fresh-Every} where user content extends rather than rebuilds per turn. The attention measurements in Section~\ref{sec:attention-probe} are correlational at the probe level and only weakly supportive at the causal level (Appendix~\ref{app:attn-patch}, $n=12$): a 2D attention mask alone does not produce the recovery achieved by token-level truncation, indicating that ``retained subset'' in Proposition~\ref{prop:cliff} must be read at the renderer layer rather than the attention layer. A stronger causal intervention via per-layer hooks or K/V value zeroing is left for follow-up.
+
+\paragraph{HCHR empirical (n=40).}
+The pilot HCHR $= 0.16$ on $n{=}5$ reported in earlier versions of this work is refined here. On $n{=}40$ failed sharded conversations (Qwen2.5-14B on math and data2text; per-block ablation: each prior assistant block individually removed, score regraded), mean HCHR $= 0.069$ with 95\% bootstrap CI $[0.018, 0.130]$ (CI excludes zero, so HCHR is non-trivially nonzero but small). 6 of 40 conversations contain at least one harmful block; the per-position distribution is non-uniform: turn 0 is never harmful ($0/40$), peaks at turns 2--3 ($0.10$--$0.13$), and the small-$n$ deep-turn rate (turn 5: $0.29$, $n{=}7$) suggests later commitments more often flip the outcome. This is the expected pattern under Proposition~\ref{prop:cliff}: any single block individually rarely lifts a contaminated conversation (because the other retained provisional content also contributes a likelihood factor), but as turns accumulate any single block becomes proportionally more likely to be the dominant anchor. The cliff explanation predicts low HCHR (most single blocks do not solo-flip) but non-zero HCHR (in some cases a single block is the dominant anchor), which is what we observe.
 
 \paragraph{Rule-based eligibility controller.}
 \textsc{CacheGuard}'s eligibility logic is hand-written and could fail on non-standard interaction patterns. A learned eligibility classifier is a natural extension but out of scope.
@@ -558,32 +579,32 @@ We argued that multi-turn LLM degradation is most parsimoniously explained not a
 % =====================================================
 \appendix
 
-\section{Synthetic benchmark results (F1 and F2)}
+\section{Synthetic benchmark results (F1, F2, F3)}
 \label{app:synthetic}
 
-F1-additive poses a multi-turn underspecified math task: across 4--6 turns, the user reveals constraints on a positive integer (divisibility, parity, bounds, digit-sum); the assistant must commit to the smallest integer satisfying all revealed constraints. Every assistant turn before the final shard is, by construction, a partial-info commitment. Concat ceiling is 0.977 and the Sharded floor is 0.609---a 37\,pp multi-turn drop that mirrors the LiC pattern. F2-corrective requires the assistant to track explicit user retractions (``Actually, the limit is X, not Y''), creating an even simpler anchoring scenario where the final correct constraint directly contradicts the partial one. Both benchmarks confirm that removing \emph{all} provisional commitments fully recovers accuracy.
+F1-additive poses a multi-turn underspecified math task: across 4--6 turns, the user reveals constraints on a positive integer (divisibility, parity, bounds, digit-sum); the assistant must commit to the smallest integer satisfying all revealed constraints. Every assistant turn before the final shard is, by construction, a partial-info commitment. F2-corrective requires the assistant to track explicit user retractions (``Actually, the limit is X, not Y''), creating an even simpler anchoring scenario where the final correct constraint directly contradicts the partial one. F3-artifact constructs a multi-step word problem in which the assistant produces an intermediate \emph{artifact} (a numerical sub-result) that is then required at a later turn---the assistant must propagate, not regenerate. Each of the three benchmarks reproduces a substantial multi-turn drop and confirms that removing \emph{all} provisional commitments fully recovers accuracy.
 
 \begin{table}[h]
 \centering
-\caption{F1 additive-constraints and F2 corrective-constraints synthetic benchmarks (Qwen2.5-14B, $N=2$ sims/instance). F1: user reveals additive constraints across 4--6 turns. F2: user gives an initial bound then explicitly retracts and corrects it. Both reproduce a multi-turn drop fully closed by any stateless protocol.}
-\label{tab:f1f2}
-\begin{tabular}{lcccc}
+\caption{F1, F2, F3 synthetic benchmarks (Qwen2.5-14B, $N=2$ sims/instance, $n{=}30$ instances each). F1: additive constraints. F2: corrective retraction. F3: intermediate-artifact propagation. Each benchmark reproduces a multi-turn drop fully closed by any stateless protocol. F3 produces the largest absolute drop (Concat 1.000, Sharded 0.433) because the artifact-propagation structure is the most sensitive to provisional content carrying into later turns.}
+\label{tab:f1f2f3}
+\begin{tabular}{lcccccc}
 \toprule
-& \multicolumn{2}{c}{F1 (additive)} & \multicolumn{2}{c}{F2 (corrective)} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
-Protocol & Acc & Gap recovery & Acc & Gap recovery \\
+& \multicolumn{2}{c}{F1 (additive)} & \multicolumn{2}{c}{F2 (corrective)} & \multicolumn{2}{c}{F3 (artifact)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Protocol & Acc & Gap rec. & Acc & Gap rec. & Acc & Gap rec. \\
 \midrule
-Concat (ceiling) & 0.977 & 100\% & 1.000 & 100\% \\
-Sharded (floor) & 0.609 & 0\% & 0.767 & 0\% \\
+Concat (ceiling) & 0.977 & 100\% & 1.000 & 100\% & 1.000 & 100\% \\
+Sharded (floor) & 0.609 & 0\% & 0.767 & 0\% & 0.433 & 0\% \\
 \midrule
-\textbf{Fresh-Last} & 1.000 & 106\% & 1.000 & 100\% \\
-\textbf{Fresh-Every} & 1.000 & 106\% & 1.000 & 100\% \\
-\textbf{CacheGuard} & 1.000 & 106\% & 1.000 & 100\% \\
+\textbf{Fresh-Last} & 1.000 & 106\% & 1.000 & 100\% & 1.000 & 100\% \\
+\textbf{Fresh-Every} & 1.000 & 106\% & 1.000 & 100\% & 1.000 & 100\% \\
+\textbf{CacheGuard} & 1.000 & 106\% & 1.000 & 100\% & 1.000 & 100\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On both F1 and F2 every stateless protocol attains 1.000. This does not differentiate \textsc{CacheGuard} from \textsc{Fresh-Every}, because neither benchmark generates an assistant artifact that the user later references back. The BFCL regime (Section~\ref{sec:bfcl}) provides the stress-test where tool results represent irreducible verified state that must be retained.
+On all three F-benchmarks every stateless protocol attains 1.000. F3 in particular drives the Sharded floor to 0.433 (a 57\,pp drop)---larger than F1 and F2---because the artifact-propagation structure means earlier provisional outputs are not just shaping later answers but are \emph{required as direct inputs} to them. The cliff theorem (Proposition~\ref{prop:cliff}) predicts this: when a provisional output is treated as factual input downstream, retention of the wrong artifact is maximally harmful. F3 does not differentiate \textsc{CacheGuard} from \textsc{Fresh-Every}, because the artifact in this synthetic test is the model's own output (provisional), not external state. The BFCL regime (Section~\ref{sec:bfcl}) is the stress-test where tool results represent irreducible verified state that must be retained, and where typed eligibility becomes structurally necessary.
 
 \section{Paired bootstrap significance tests}
 \label{app:stats}
