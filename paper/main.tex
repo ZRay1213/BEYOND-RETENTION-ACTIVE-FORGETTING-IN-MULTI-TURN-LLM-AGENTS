@@ -599,15 +599,16 @@ Model & Protocol & F1 (additive) & F2 (corrective) & F3 (artifact) & Avg \\
  & \textbf{Fresh-Last} & 1.000 & 1.000 & 1.000 & 1.000 \\
  & \textbf{Fresh-Every} & 1.000 & 1.000 & 1.000 & 1.000 \\
 \midrule
-\multirow{3}{*}{Llama-3.1-8B}
+\multirow{4}{*}{Llama-3.1-8B}
  & Concat (ceiling) & 0.617 & 0.867 & 1.000 & 0.828 \\
  & Sharded (floor) & 0.328 & 0.733 & 0.117 & 0.393 \\
  & \textbf{Fresh-Last} & \textbf{0.810} & \textbf{0.967} & \textbf{1.000} & \textbf{0.926} \\
+ & \textbf{Fresh-Every} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} & \textbf{1.000} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Three observations. (1) The Sharded multi-turn drop replicates across both architecture families on all three F-benchmarks. (2) \textsc{Fresh-Last} fully recovers (or exceeds) the Concat ceiling on every (model, benchmark) cell---the cliff predicts this since the F-synthetics have no external authoritative state, so the contamination factor in Proposition~\ref{prop:cliff} is the only source of bias. (3) F3 (artifact-propagation) is the most sensitive: when a provisional output is treated as factual input downstream, retention of the wrong artifact is maximally harmful. On Llama, F3 Sharded collapses to 0.117 (88\,pp below Concat 1.000), and \textsc{Fresh-Last} restores full accuracy. The F-synthetics do not differentiate \textsc{CacheGuard} from \textsc{Fresh-Every} because the artifact is the model's own output (provisional), not external state. The BFCL regime (Section~\ref{sec:bfcl}) is the complementary stress-test where tool results represent irreducible verified state that must be retained, and where typed eligibility becomes structurally necessary.
+Three observations. (1) The Sharded multi-turn drop replicates across both architecture families on all three F-benchmarks. (2) \textsc{Fresh-Last} fully recovers (or exceeds) the Concat ceiling on every (model, benchmark) cell, and \textsc{Fresh-Every} reaches 1.000 on every cell of both models---the cliff predicts this since the F-synthetics have no external authoritative state, so the contamination factor in Proposition~\ref{prop:cliff} is the only source of bias and removing all provisional content recovers the ceiling. (3) F3 (artifact-propagation) is the most sensitive: when a provisional output is treated as factual input downstream, retention of the wrong artifact is maximally harmful. On Llama, F3 Sharded collapses to 0.117 (88\,pp below Concat 1.000), and \textsc{Fresh-Last} / \textsc{Fresh-Every} both restore full accuracy. The F-synthetics do not differentiate \textsc{CacheGuard} from \textsc{Fresh-Every} because the artifact is the model's own output (provisional), not external state. The BFCL regime (Section~\ref{sec:bfcl}) is the complementary stress-test where tool results represent irreducible verified state that must be retained, and where typed eligibility becomes structurally necessary.
 
 \section{Paired bootstrap significance tests}
 \label{app:stats}
